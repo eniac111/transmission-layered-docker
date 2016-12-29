@@ -30,7 +30,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     chown -Rh debian-transmission. $dir && \
     rm -rf /var/lib/apt/lists/* /tmp/* \
     && rm -rf /usr/share/transmission/web \
-    && git clone https://github.com/theroyalstudent/layered.git /usr/share/transmissin/web \
+    && git clone https://github.com/theroyalstudent/layered.git /usr/share/transmission/web \
     && apt-get -qqy purge git-core ca-certificates \
     && apt-get -qqy autoremove
 
