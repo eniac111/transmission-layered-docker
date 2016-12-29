@@ -1,10 +1,10 @@
 FROM debian:stretch
-MAINTAINER David Personette <dperson@gmail.com>
+MAINTAINER Blagovest Petrov <blagovest@petrovs.info>
 
 # Install transmission
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends curl procps \
+    apt-get install -qqy --no-install-recommends curl procps git-core ca-certificates \
                 transmission-daemon \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     apt-get clean && \
@@ -28,7 +28,12 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     sed -i '/"queue-stalled-enabled"/a\    "ratio-limit-enabled": true,' \
                 $file && \
     chown -Rh debian-transmission. $dir && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* \
+    && rm -rf /usr/share/transmission/web \
+    && git clone https://github.com/theroyalstudent/layered.git /usr/share/transmissin/web \
+    && apt-get -qqy purge git-core ca-certificates \
+    && apt-get -qqy autoremove
+
 COPY transmission.sh /usr/bin/
 
 VOLUME ["/var/lib/transmission-daemon"]
